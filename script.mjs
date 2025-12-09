@@ -259,13 +259,17 @@ const main = async () => {
 
   await processDates(dates, captcha, allResults, failedDates);
 
-  console.log(`\nTotal: ${allResults.length} registros`);
+  const filteredResults = allResults.filter(item => {
+    return item.sexo === "1" && !item.tipocontrato.includes("Treinador");
+  });
+
+  console.log(`\nTotal: ${filteredResults.length} registros`);
 
   // Salvar resultados em arquivo JSON
   const startDateStr = startDate.toLocaleDateString('pt-BR').replace(/\//g, '-');
   const endDateStr = endDate.toLocaleDateString('pt-BR').replace(/\//g, '-');
   const fileName = `results/resultados_${startDateStr}_a_${endDateStr}.json`;
-  fs.writeFileSync(fileName, JSON.stringify(allResults, null, 2));
+  fs.writeFileSync(fileName, JSON.stringify(filteredResults, null, 2));
   console.log(`Resultados salvos em: ${fileName}`);
 
   // Salvar datas que falharam
